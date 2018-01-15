@@ -85,17 +85,20 @@ def parse_commit(commit_str):
 
     # parse the changes line
     changes_line = lines[-1]
-    if re.match(r' ([0-9]+) file[s]{0,1} changed', changes_line):
-        data['changed_files'] = int(re.match(r' ([0-9]+) file[s]{0,1} changed',
-                                             changes_line).group(1))
 
-    if re.match(r'.* ([0-9]+) insertion[s]{0,1}', changes_line):
-        data['additions'] = int(re.match(r'.* ([0-9]+) insertion[s]{0,1}',
-                                         changes_line).group(1))
+    changed_regex = r' ([0-9]+) file[s]{0,1} changed'
+    insert_regex = r'.* ([0-9]+) insertion[s]{0,1}'
+    delete_regex = r'.* ([0-9]+) deletion[s]{0,1}'
 
-    if re.match(r'.* ([0-9]+) deletion[s]{0,1}', changes_line):
-        data['deletions'] = int(re.match(r'.* ([0-9]+) deletion[s]{0,1}',
-                                changes_line).group(1))
+    if re.match(changed_regex, changes_line):
+        data['changed_files'] = \
+                int(re.match(changed_regex, changes_line).group(1))
+
+    if re.match(insert_regex, changes_line):
+        data['additions'] = int(re.match(insert_regex, changes_line).group(1))
+
+    if re.match(delete_regex, changes_line):
+        data['deletions'] = int(re.match(delete_regex, changes_line).group(1))
 
     return data
 
