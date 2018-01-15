@@ -90,7 +90,7 @@ def get_commit_lines(commit_hash, filenames):
 
 
 def get_blame_commit(commit_hash, filenames, fname_lines):
-    """Get the last commit to modify a line in a file before the given commit.
+    """Get the commits which last touched the lines changed by a given commit.
 
     Parameters
     ----------
@@ -147,9 +147,6 @@ def link_bugs_to_commits(fix_commits):
         commits which last modified the lines the bugfix commit is changing.
     """
 
-    # fix_commits = df.loc[df.tag.str.lower.startswith('bug') |
-    #                      df.tag.str.lower.startswith('fix')].hash
-
     bug_commits = {}
 
     for commit in fix_commits:
@@ -164,8 +161,8 @@ def link_bugs_to_commits(fix_commits):
         fname_lines = get_commit_lines(commit, filenames)
 
         # get the last commit to modify those lines
-        origin_commit = get_blame_commit(commit, filenames, fname_lines)
+        origin_commits = get_blame_commit(commit, filenames, fname_lines)
 
-        bug_commits[commit] = origin_commit
+        bug_commits[commit] = origin_commits
 
     return bug_commits
