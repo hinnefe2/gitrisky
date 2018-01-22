@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 
 from collections import defaultdict
+from gitcmds import get_git_log
 
 
 def split_commits(whole_log):
@@ -103,9 +104,21 @@ def parse_commit(commit_str):
     return feats
 
 
-def make_commit_log_df(filename):
+def get_features(commit=None):
+    """Get commit-level features.
 
-    with open(filename) as infile:
-        logstr = infile.read()
+    Parameters
+    ----------
+    commit : str, optional
+        The hash of the commit to get features for. If not given this will
+        return features for all commits.
+
+    Returns
+    -------
+    features : pd.DataFrame of shape [n_commits, n_features]
+        The features to use for modeling.
+    """
+
+    logstr = get_git_log(commit)
 
     return pd.DataFrame([parse_commit(c) for c in split_commits(logstr)])
