@@ -51,9 +51,9 @@ def get_git_log(commit=None):
     """
 
     if commit is not None:
-        bash_cmd = 'git log --stat --no-pager -1 {commit}'.format(commit=commit)
+        bash_cmd = 'git --no-pager log --stat -1 {commit}'.format(commit=commit)
     else:
-        bash_cmd = 'git log --stat --no-pager'
+        bash_cmd = 'git --no-pager log --stat'
 
     stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
 
