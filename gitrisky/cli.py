@@ -40,7 +40,7 @@ def train():
 @cli.command()
 @click.option('-c', '--commit', type=str)
 def predict(commit):
-    """Score a git commit bug risk model
+    """Score a git commit bug risk model.
 
     Parameters
     ----------
