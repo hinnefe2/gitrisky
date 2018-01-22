@@ -28,7 +28,7 @@ def train():
 
     # instantiate and train a model
     model = RandomForestClassifier()
-    model.train(features, labels)
+    model.fit(features, labels)
 
     print('Trained a model on {n} training examples with {n_bug} positive cases'
           .format(n=len(features), n_bug=sum(labels)))
