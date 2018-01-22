@@ -60,6 +60,7 @@ def get_git_log(commit=None):
     return stdout
 
 
+def _get_commit_filenames(commit_hash):
     """Get the filename(s) of files which were modified by a specific commit.
 
     Parameters
@@ -78,9 +79,9 @@ def get_git_log(commit=None):
     bash_cmd = ('git --no-pager diff {commit_hash} {commit_hash}^ --name-only'
                 .format(commit_hash=commit_hash))
 
-    cp = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
 
-    filenames = cp.split('\n')
+    filenames = stdout.split('\n')
 
     if not isinstance(filenames, list):
         filenames = [filenames]
@@ -88,7 +89,7 @@ def get_git_log(commit=None):
     return filenames
 
 
-def get_commit_lines(commit_hash, filenames):
+def _get_commit_lines(commit_hash, filenames):
     """Get the line numbers which were modified in each file by a given commit.
 
     Parameters
@@ -113,10 +114,10 @@ def get_commit_lines(commit_hash, filenames):
         bash_cmd = ('git --no-pager diff {commit}^ {commit} -U0 -- {fname}'
                     .format(commit=commit_hash, fname=fname))
 
-        cp = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+        stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
 
         # pull out the header line of each diff section
-        headers = [l for l in cp.split('\n') if '@@' in l]
+        headers = [l for l in stdout.split('\n') if '@@' in l]
 
         # header will look like @@ -198,2 +198,2 @@
         for header in headers:
@@ -136,7 +137,7 @@ def get_commit_lines(commit_hash, filenames):
     return fname_lines
 
 
-def get_blame_commit(commit_hash, filenames, fname_lines):
+def _get_blame_commit(commit_hash, filenames, fname_lines):
     """Get the commits which last touched the lines changed by a given commit.
 
     Parameters
@@ -170,16 +171,16 @@ def get_blame_commit(commit_hash, filenames, fname_lines):
                          commit=commit_hash,
                          fname=fname))
 
-            cp = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+            stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
 
-            changed_lines = cp.split('\n')
+            changed_lines = stdout.split('\n')
             buggy_commits = \
                 buggy_commits.union([l.split(' ')[0] for l in changed_lines])
 
     return buggy_commits
 
 
-def link_bugs_to_commits(fix_commits):
+def _link_bugs_to_commits(fix_commits):
     """Link a bugfix commit to the commits which introduced the bug it fixes.
 
     Parameters
@@ -202,13 +203,13 @@ def link_bugs_to_commits(fix_commits):
         commit = _trim_hash(commit)
 
         # get the files modified by the commit
-        filenames = get_commit_filenames(commit)
+        filenames = _get_commit_filenames(commit)
 
         # get the lines in each file modified by the commit
-        fname_lines = get_commit_lines(commit, filenames)
+        fname_lines = _get_commit_lines(commit, filenames)
 
         # get the last commit to modify those lines
-        origin_commits = get_blame_commit(commit, filenames, fname_lines)
+        origin_commits = _get_blame_commit(commit, filenames, fname_lines)
 
         bug_commits[commit] = origin_commits
 
