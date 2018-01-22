@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from collections import defaultdict
-from gitcmds import get_git_log
+from .gitcmds import get_git_log
 
 
 def split_commits(whole_log):
