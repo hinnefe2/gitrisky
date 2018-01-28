@@ -2,9 +2,7 @@
 
 import click
 
-from sklearn.ensemble import RandomForestClassifier
-
-from .model import save_model, load_model
+from .model import create_model, save_model, load_model
 from .gitcmds import get_latest_commit
 from .parsing import get_features, get_labels
 
@@ -27,7 +25,7 @@ def train():
     labels = get_labels()
 
     # instantiate and train a model
-    model = RandomForestClassifier()
+    model = create_model()
     model.fit(features, labels)
 
     print('Trained a model on {n} training examples with {n_bug} positive cases'

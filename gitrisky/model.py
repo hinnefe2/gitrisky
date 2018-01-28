@@ -4,6 +4,7 @@ import os
 import pickle
 
 from git import Repo
+from sklearn.ensemble import RandomForestClassifier
 
 
 def _get_model_path():
@@ -22,6 +23,22 @@ def _get_model_path():
     model_path = os.path.join(repo_dir, 'gitrisky.model')
 
     return model_path
+
+
+def create_model():
+    """Create a new model.
+
+    Returns
+    -------
+    model : scikit-learn model
+        A saved scikit-learn model
+    """
+
+    # instantiate a new model
+    # TODO: replace this with a gridsearchCV object for hyperparameter tuning
+    model = RandomForestClassifier()
+
+    return model
 
 
 def load_model():
