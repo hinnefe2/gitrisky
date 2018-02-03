@@ -125,7 +125,7 @@ def get_features(commit=None):
 
     feats = pd.DataFrame([parse_commit(c) for c in split_commits(logstr)])
 
-    feats = feats.set_index('hash')
+    feats = feats.set_index('hash').fillna(0)
 
     # have to one-hot encode the string features
     # NOTE: this means that if new values for these categoricals show up later
