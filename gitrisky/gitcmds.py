@@ -199,7 +199,7 @@ def _get_blame_commit(commit_hash, filenames, fname_lines):
     return buggy_commits
 
 
-def _link_bugs_to_commits(fix_commits):
+def link_fixes_to_bugs(fix_commits):
     """Link a bugfix commit to the commits which introduced the bug it fixes.
 
     Parameters
@@ -209,12 +209,11 @@ def _link_bugs_to_commits(fix_commits):
 
     Returns
     -------
-    bug_commits: dict{str: list}
-        A dictionary keyed on bugfix commit hash and valued with a list of
-        commits which last modified the lines the bugfix commit is changing.
+    bug_commits: list(str)
+        A list of hashes for commits which introduced bugs.
     """
 
-    bug_commits = {}
+    bug_commits = set()
 
     for commit in fix_commits:
 
@@ -230,6 +229,6 @@ def _link_bugs_to_commits(fix_commits):
         # get the last commit to modify those lines
         origin_commits = _get_blame_commit(commit, filenames, fname_lines)
 
-        bug_commits[commit] = origin_commits
+        bug_commits = bug_commits.union(origin_commits)
 
-    return bug_commits
+    return list(bug_commits)
