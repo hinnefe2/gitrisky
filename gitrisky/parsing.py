@@ -121,4 +121,10 @@ def get_features(commit=None):
 
     logstr = get_git_log(commit)
 
-    return pd.DataFrame([parse_commit(c) for c in split_commits(logstr)])
+    feats = pd.DataFrame([parse_commit(c) for c in split_commits(logstr)])
+
+    if commit is not None:
+        return feats.loc[feats['hash'] == trim_hash(commit)]
+
+    else:
+        return feats
