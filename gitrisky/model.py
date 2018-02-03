@@ -48,6 +48,11 @@ def load_model():
     -------
     model : scikit-learn model
         A saved scikit-learn model
+
+    Raises
+    ------
+    FileNotFoundError
+        If the trained model pickle file can't be found
     """
 
     model_path = _get_model_path()

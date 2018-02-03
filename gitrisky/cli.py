@@ -51,7 +51,12 @@ def predict(commit):
         If a gitrisky model has not yet been trained on the currrent repo.
     """
 
-    model = load_model()
+    try:
+        model = load_model()
+    except FileNotFoundError:
+        print('could not find trained model. '
+              'have you run "gitrisky train" yet?')
+        return
 
     if commit is None:
         commit = get_latest_commit()
