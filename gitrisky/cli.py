@@ -58,7 +58,8 @@ def predict(commit):
 
     features = get_features(commit)
 
-    score = model.predict_proba(features)
+    # pull out just the postive class probability
+    [(_, score)] = model.predict_proba(features)
 
     print('Commit {commit} has a bug score of {score} / 1.0'
           .format(commit=commit, score=score))
