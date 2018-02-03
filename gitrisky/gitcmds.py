@@ -60,6 +60,25 @@ def get_git_log(commit=None):
     return stdout
 
 
+def get_bugfix_commits():
+    """Get the commits whose commit messages contain BUG or FIX.
+
+    Returns
+    -------
+    commits : list(str)
+        A list of commit hashes.
+    """
+
+    # TODO: add option to specify custom bugfix tags
+    bash_cmd = "git log -i --all --grep BUG --grep FIX --pretty=format:%h"
+
+    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+
+    commits = stdout.split('\n')
+
+    return commits
+
+
 def _get_commit_filenames(commit_hash):
     """Get the filename(s) of files which were modified by a specific commit.
 
