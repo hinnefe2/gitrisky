@@ -57,10 +57,11 @@ def parse_commit(commit_str):
     commit_line = [line for line in lines if line.startswith('commit')][0]
     feats['hash'] = trim_hash(re.match(r'commit (\w{40})', commit_line).group(1))
 
+    # NOTE: skipping string features for now because the one-hot encoding is a pain
     # parse the author line
-    author_line = [line for line in lines if line.startswith('Author:')][0]
-    author_matches = re.match(r'Author: (.+) <(.+)>', author_line)
-    feats['user'] = author_matches.group(1)
+    # author_line = [line for line in lines if line.startswith('Author:')][0]
+    # author_matches = re.match(r'Author: (.+) <(.+)>', author_line)
+    # feats['user'] = author_matches.group(1)
     # feats['email'] = author_matches.group(2)
 
     # parse the date line
@@ -74,7 +75,9 @@ def parse_commit(commit_str):
     # parse the body lines
     body_lines = [line.lstrip() for line in lines if line.startswith('    ')]
     feats['len_message'] = len('\n'.join(body_lines))
-    feats['tag'] = body_lines[0].split()[0].rstrip(':')
+
+    # NOTE: skipping string features for now because the one-hot encoding is a pain
+    # feats['tag'] = body_lines[0].split()[0].rstrip(':')
 
     # if this is a merge commit fill some fields with NaNs
     if any([line.startswith('Merge:') for line in lines]):
@@ -127,18 +130,11 @@ def get_features(commit=None):
 
     feats = feats.set_index('hash').fillna(0)
 
-    # have to one-hot encode the string features
-    # NOTE: this means that if new values for these categoricals show up later
-    # (eg new commit authors, new commit tags) a model trained on the previous
-    # version of the data won't work on the new data (because it will have a
-    # different shape)
-    dummied = pd.get_dummies(feats)
-
     if commit is not None:
-        return dummied.loc[dummied.index == trim_hash(commit)]
+        return feats.loc[feats.index == trim_hash(commit)]
 
     else:
-        return dummied
+        return feats
 
 
 def get_labels():
