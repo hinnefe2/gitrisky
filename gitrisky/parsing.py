@@ -130,11 +130,7 @@ def get_features(commit=None):
 
     feats = feats.set_index('hash').fillna(0)
 
-    if commit is not None:
-        return feats.loc[feats.index == trim_hash(commit)]
-
-    else:
-        return feats
+    return feats
 
 
 def get_labels():
