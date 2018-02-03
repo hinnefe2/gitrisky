@@ -6,7 +6,7 @@ from collections import defaultdict
 from subprocess import check_output
 
 
-def _trim_hash(commit):
+def trim_hash(commit):
     """Trim a commit hash to 8 characters."""
 
     return commit[:8]
@@ -28,7 +28,7 @@ def get_latest_commit():
     # single line outputs get quoted by check_output for some reason
     stdout = stdout.replace('"', '')
 
-    return _trim_hash(stdout)
+    return trim_hash(stdout)
 
 
 def get_git_log(commit=None):
@@ -74,7 +74,7 @@ def _get_commit_filenames(commit_hash):
         A list of the filenames which were modified by the specified commit.
     """
 
-    commit_hash = _trim_hash(commit_hash)
+    commit_hash = trim_hash(commit_hash)
 
     bash_cmd = ('git --no-pager diff {commit_hash} {commit_hash}^ --name-only'
                 .format(commit_hash=commit_hash))
@@ -106,7 +106,7 @@ def _get_commit_lines(commit_hash, filenames):
         (start_line, number_of_lines) tuples.
     """
 
-    commit_hash = _trim_hash(commit_hash)
+    commit_hash = trim_hash(commit_hash)
     fname_lines = defaultdict(lambda: [])
 
     for fname in filenames:
@@ -157,7 +157,7 @@ def _get_blame_commit(commit_hash, filenames, fname_lines):
         lines modified by the given commit.
     """
 
-    commit_hash = _trim_hash(commit_hash)
+    commit_hash = trim_hash(commit_hash)
     buggy_commits = set()
 
     for fname in filenames:
@@ -200,7 +200,7 @@ def _link_bugs_to_commits(fix_commits):
     for commit in fix_commits:
 
         # trim the hash to 8 characters
-        commit = _trim_hash(commit)
+        commit = trim_hash(commit)
 
         # get the files modified by the commit
         filenames = _get_commit_filenames(commit)
