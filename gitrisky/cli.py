@@ -26,10 +26,10 @@ def train():
 
     # instantiate and train a model
     model = create_model()
-    model.fit(features, labels)
+    model.fit(features, labels.label)
 
     print('Trained a model on {n} training examples with {n_bug} positive cases'
-          .format(n=len(features), n_bug=sum(labels)))
+          .format(n=len(features), n_bug=sum(labels.label)))
 
     # pickle the model to a file in the top level repo directory
     save_model(model)
