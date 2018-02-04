@@ -83,7 +83,7 @@ def parse_commit(commit_str):
 
     # if this is a merge commit fill some fields with NaNs
     if any([line.startswith('Merge:') for line in lines]):
-        feats['tag'] = 'MERGE'
+        # feats['tag'] = 'MERGE'
         feats['changed_files'] = np.NaN
         feats['additions'] = np.NaN
         feats['deletions'] = np.NaN

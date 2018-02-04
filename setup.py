@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.1.0c'
+VERSION = '0.1.0d'
 
 
 setup(
@@ -13,7 +13,8 @@ setup(
 
     url='https://github.com/hinnefe2/gitrisky',
 
-    download_url='https://github.com/hinnefe2/gitrisky/archive/{}.tar.gz'.format(VERSION),
+    download_url=('https://github.com/hinnefe2/gitrisky/archive/{}.tar.gz'
+                  .format(VERSION)),
 
     author='J. Henry Hinnefeld',
 
