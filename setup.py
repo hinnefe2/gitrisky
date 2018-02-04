@@ -13,7 +13,8 @@ setup(
 
     url='https://github.com/hinnefe2/gitrisky',
 
-    download_url='https://github.com/hinnefe2/gitrisky/archive/{}.tar.gz'.format(VERSION),
+    download_url=('https://github.com/hinnefe2/gitrisky/archive/{}.tar.gz'
+                  .format(VERSION)),
 
     author='J. Henry Hinnefeld',
 
