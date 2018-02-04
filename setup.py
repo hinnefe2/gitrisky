@@ -16,11 +16,11 @@ setup(
 
     description='Predict code bug risk with git metadata',
 
-    version='0.1.0',
+    version='0.1.0a',
 
     url='https://github.com/hinnefe2/gitrisky',
 
-    download_url='https://github.com/hinnefe2/gitrisky/archive/v0.1.0.tar.gz',
+    download_url='https://github.com/hinnefe2/gitrisky/archive/v0.1.0a.tar.gz',
 
     author='J. Henry Hinnefeld',
 
