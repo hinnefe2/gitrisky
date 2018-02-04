@@ -31,6 +31,13 @@ setup(
         'scipy>=0.19',
         ],
 
+    classifiers=[
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Software Development :: Version Control :: Git',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        ],
 
     include_package_data=True,
 
