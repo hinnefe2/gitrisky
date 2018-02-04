@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.1.1a0'
+VERSION = '0.1.1a1'
 
 
 setup(
@@ -32,6 +32,7 @@ setup(
         ],
 
     classifiers=[
+        'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Topic :: Software Development :: Version Control :: Git',
