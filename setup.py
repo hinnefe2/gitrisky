@@ -1,13 +1,4 @@
-import os
-
 from setuptools import setup, find_packages
-
-
-THIS_DIR = os.path.abspath(os.path.dirname(__file__))
-
-
-with open(os.path.join(THIS_DIR, 'requirements.txt')) as reqs:
-    requirements = reqs.read().strip().split('\n')
 
 
 setup(
@@ -16,11 +7,11 @@ setup(
 
     description='Predict code bug risk with git metadata',
 
-    version='0.1.0a',
+    version='0.1.0b',
 
     url='https://github.com/hinnefe2/gitrisky',
 
-    download_url='https://github.com/hinnefe2/gitrisky/archive/v0.1.0a.tar.gz',
+    download_url='https://github.com/hinnefe2/gitrisky/archive/v0.1.0b.tar.gz',
 
     author='J. Henry Hinnefeld',
 
@@ -28,7 +19,14 @@ setup(
 
     packages=find_packages(),
 
-    install_requires=requirements,
+    install_requires=[
+        'click>=6.7',
+        'GitPython>=2.1',
+        'numpy>=1.13',
+        'pandas>=0.20',
+        'scikit-learn>=0.19.0',
+        ],
+
 
     include_package_data=True,
 
