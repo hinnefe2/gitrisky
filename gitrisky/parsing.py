@@ -7,7 +7,8 @@ import numpy as np
 import pandas as pd
 
 from collections import defaultdict
-from .gitcmds import get_git_log, get_bugfix_commits, link_fixes_to_bugs, trim_hash
+from .gitcmds import get_git_log, get_bugfix_commits, link_fixes_to_bugs, \
+    trim_hash
 
 
 def split_commits(whole_log):
@@ -55,9 +56,10 @@ def parse_commit(commit_str):
 
     # parse the commit line
     commit_line = [line for line in lines if line.startswith('commit')][0]
-    feats['hash'] = trim_hash(re.match(r'commit (\w{40})', commit_line).group(1))
+    feats['hash'] = \
+        trim_hash(re.match(r'commit (\w{40})', commit_line).group(1))
 
-    # NOTE: skipping string features for now because the one-hot encoding is a pain
+    # NOTE: skip string features for now because the one-hot encoding is a pain
     # parse the author line
     # author_line = [line for line in lines if line.startswith('Author:')][0]
     # author_matches = re.match(r'Author: (.+) <(.+)>', author_line)
@@ -76,7 +78,7 @@ def parse_commit(commit_str):
     body_lines = [line.lstrip() for line in lines if line.startswith('    ')]
     feats['len_message'] = len('\n'.join(body_lines))
 
-    # NOTE: skipping string features for now because the one-hot encoding is a pain
+    # NOTE: skip string features for now because the one-hot encoding is a pain
     # feats['tag'] = body_lines[0].split()[0].rstrip(':')
 
     # if this is a merge commit fill some fields with NaNs

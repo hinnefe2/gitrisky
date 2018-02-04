@@ -28,7 +28,7 @@ def train():
     model = create_model()
     model.fit(features, labels.label)
 
-    print('Trained a model on {n} training examples with {n_bug} positive cases'
+    print('Model trained on {n} training examples with {n_bug} positive cases'
           .format(n=len(features), n_bug=sum(labels.label)))
 
     # pickle the model to a file in the top level repo directory

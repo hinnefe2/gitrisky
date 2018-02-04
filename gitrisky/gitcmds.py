@@ -51,7 +51,8 @@ def get_git_log(commit=None):
     """
 
     if commit is not None:
-        bash_cmd = 'git --no-pager log --stat -1 {commit}'.format(commit=commit)
+        bash_cmd = \
+            'git --no-pager log --stat -1 {commit}'.format(commit=commit)
     else:
         bash_cmd = 'git --no-pager log --stat'
 
@@ -190,7 +191,8 @@ def _get_blame_commit(commit_hash, filenames, fname_lines):
                          commit=commit_hash,
                          fname=fname))
 
-            stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+            stdout = \
+                check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
 
             changed_lines = stdout.split('\n')
             buggy_commits = \
