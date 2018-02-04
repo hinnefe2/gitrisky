@@ -13,5 +13,9 @@ install:
 
 # command to run tests
 script:
-  - pytest
+  - pytest --cov=./
   - flake8
+
+# upload test coverage report to codecov
+after_success:
+  - codecov
