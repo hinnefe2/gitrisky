@@ -20,6 +20,8 @@ setup(
 
     url='https://github.com/hinnefe2/gitrisky',
 
+    download_url='https://github.com/hinnefe2/gitrisky/archive/v0.1.0.tar.gz',
+
     author='J. Henry Hinnefeld',
 
     author_email='henry.hinnefeld@gmail.com',

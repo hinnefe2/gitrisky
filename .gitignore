@@ -102,3 +102,6 @@ ENV/
 
 # vim undo history
 *.un~
+
+# pypi credentials
+.pypirc
