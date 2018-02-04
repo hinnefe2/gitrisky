@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+VERSION = '0.1.0c'
+
 
 setup(
 
@@ -7,11 +9,11 @@ setup(
 
     description='Predict code bug risk with git metadata',
 
-    version='0.1.0b',
+    version=VERSION,
 
     url='https://github.com/hinnefe2/gitrisky',
 
-    download_url='https://github.com/hinnefe2/gitrisky/archive/v0.1.0b.tar.gz',
+    download_url='https://github.com/hinnefe2/gitrisky/archive/{}.tar.gz'.format(VERSION),
 
     author='J. Henry Hinnefeld',
 
@@ -24,7 +26,8 @@ setup(
         'GitPython>=2.1',
         'numpy>=1.13',
         'pandas>=0.20',
-        'scikit-learn>=0.19.0',
+        'scikit-learn>=0.19',
+        'scipy>=0.19',
         ],
 
 
