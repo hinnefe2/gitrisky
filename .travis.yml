@@ -15,3 +15,7 @@ install:
 script:
   - pytest
   - flake8
+
+# upload test coverage report to codecov
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
