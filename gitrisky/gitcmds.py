@@ -6,6 +6,25 @@ from collections import defaultdict
 from subprocess import check_output
 
 
+def _run_bash_command(bash_cmd):
+    """Execute a bash command and capture the resulting stdout.
+
+    Parameters
+    ----------
+    bash_cmd : str
+        The bash command to run.
+
+    Returns
+    -------
+    stdout : str
+        The resulting stdout output.
+    """
+
+    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+
+    return stdout
+
+
 def trim_hash(commit):
     """Trim a commit hash to 8 characters."""
 
@@ -23,7 +42,7 @@ def get_latest_commit():
 
     bash_cmd = 'git log -1 --pretty=format:"%H"'
 
-    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+    stdout = _run_bash_command(bash_cmd)
 
     # single line outputs get quoted by check_output for some reason
     stdout = stdout.replace('"', '')
@@ -56,7 +75,7 @@ def get_git_log(commit=None):
     else:
         bash_cmd = 'git --no-pager log --stat'
 
-    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+    stdout = _run_bash_command(bash_cmd)
 
     return stdout
 
@@ -73,7 +92,7 @@ def get_bugfix_commits():
     # TODO: add option to specify custom bugfix tags
     bash_cmd = "git log -i --all --grep BUG --grep FIX --pretty=format:%h"
 
-    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+    stdout = _run_bash_command(bash_cmd)
 
     commits = stdout.split('\n')
 
@@ -99,7 +118,7 @@ def _get_commit_filenames(commit_hash):
     bash_cmd = ('git --no-pager diff {commit_hash} {commit_hash}^ --name-only'
                 .format(commit_hash=commit_hash))
 
-    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+    stdout = _run_bash_command(bash_cmd)
 
     filenames = stdout.split('\n')
 
@@ -134,7 +153,7 @@ def _get_commit_lines(commit_hash, filenames):
         bash_cmd = ('git --no-pager diff {commit}^ {commit} -U0 -- {fname}'
                     .format(commit=commit_hash, fname=fname))
 
-        stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+        stdout = _run_bash_command(bash_cmd)
 
         # pull out the header line of each diff section
         headers = [l for l in stdout.split('\n') if '@@' in l]
@@ -191,8 +210,7 @@ def _get_blame_commit(commit_hash, filenames, fname_lines):
                          commit=commit_hash,
                          fname=fname))
 
-            stdout = \
-                check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+            stdout = _run_bash_command(bash_cmd)
 
             changed_lines = stdout.split('\n')
             buggy_commits = \
