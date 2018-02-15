@@ -120,10 +120,8 @@ def _get_commit_filenames(commit_hash):
 
     stdout = _run_bash_command(bash_cmd)
 
+    # note that .split() always returns a list, even if the string wasn't split
     filenames = stdout.split('\n')
-
-    if not isinstance(filenames, list):
-        filenames = [filenames]
 
     return filenames
 
