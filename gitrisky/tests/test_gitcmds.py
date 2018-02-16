@@ -4,7 +4,8 @@ import numpy as np
 from collections import defaultdict
 
 from gitrisky.gitcmds import _run_bash_command, trim_hash, get_latest_commit, \
-    get_git_log, get_bugfix_commits, _get_commit_filenames, _get_commit_lines
+    get_git_log, get_bugfix_commits, _get_commit_filenames, \
+    _get_commit_lines, _get_blame_commit, link_fixes_to_bugs
 
 
 @mock.patch('gitrisky.gitcmds.check_output')
@@ -136,3 +137,43 @@ def test_get_commit_lines(mock_runbc):
 
     # we didn't delete any lines in model.py
     assert np.array_equal(lines['gitrisky/model.py'], [])
+
+
+@mock.patch('gitrisky.gitcmds._run_bash_command')
+def test_get_blame_commit(mock_runbc):
+
+    stdout1 = ("c668b98e (Henry Hinnefeld 2018-01-22 07:33:22 -0600 30)     model = RandomForestClassifier()")  # noqa
+    stdout2 = ("c668b98e gitrisky/cli.py (Henry Hinnefeld 2018-01-22 07:33:22 -0600 5) from sklearn.ensemble import RandomForestClassifier\n"  # noqa
+               "2f0b9d3b cli.py          (Henry Hinnefeld 2018-01-21 20:03:36 -0600 6) \n"  # noqa
+               "209879e0 gitrisky/cli.py (Henry Hinnefeld 2018-01-22 07:34:16 -0600 7) from .model import save_model, load_model")  # noqa
+    mock_runbc.side_effect = [stdout1, stdout2]
+
+    filenames = ['gitrisky/cli.py', 'gitrisky/model.py']
+    fname_lines = {'gitrisky/cli.py': [('5', '3'), ('30', '1')],
+                   'gitrisky/model.py': []}
+
+    bug_commits = _get_blame_commit('dc95b21', filenames, fname_lines)
+
+    # check we called the right git commands
+    assert mock_runbc.called_with(
+        'git --no-pager blame -L5,+3 dc95b21^ -- gitrisky/cli.py')
+    assert mock_runbc.called_with(
+        'git --no-pager blame -L30,+1 dc95b21^ -- gitrisky/cli.py')
+
+    assert isinstance(bug_commits, set)
+    assert bug_commits == set(['c668b98e', '2f0b9d3b', '209879e0'])
+
+
+def test_link_fixes_to_bugs():
+
+    # NOTE: this is effectively an integration test because the
+    # link_fixes_to_bugs function just chains all the other functions
+
+    # NOTE: this test actually runs against the gitrisky repo history
+
+    fix_commits = ['3e10227', '2c3dca4']
+
+    bug_commits = link_fixes_to_bugs(fix_commits)
+
+    assert isinstance(bug_commits, list)
+    assert set(bug_commits) == set(['d90875b0', 'e359f619', 'bb47087b'])
