@@ -46,14 +46,13 @@ def test_get_latest_commit(mock_runbc):
 @mock.patch('gitrisky.gitcmds._run_bash_command')
 def test_get_git_log(mock_runbc):
 
-    stdout = """
-Merge: 910cdb3 bbb59ea
-Author: Henry Hinnefeld <henry.hinnefeld@gmail.com>
-Date:   Sun Feb 4 15:55:45 2018 -0600
-
-Merge pull request #10 from hinnefe2/write_readme
-
-            Write readme"""
+    stdout = ("Merge: 910cdb3 bbb59ea\n"
+              "Author: Henry Hinnefeld <henry.hinnefeld@gmail.com>\n"
+              "Date:   Sun Feb 4 15:55:45 2018 -0600\n"
+              "\n"
+              "    Merge pull request #10 from hinnefe2/write_readme\n"
+              "\n"
+              "    Write readme")
 
     mock_runbc.return_value = stdout
 
@@ -115,13 +114,12 @@ def test_get_commit_lines(mock_runbc):
     # specify different return values for repeated calls to mock_runbc
     # note that this isn't the complete output of the relevant git command,
     # just the important bits
-    stdouts = ["""
-@@ -5,3 +5 @@ import click
-@@ -30 +28 @@ def train():""", """
-@@ -6,0 +7 @@ from git import Repo
-@@ -26,0 +28,16 @@ def _get_model_path():"""]
+    stdout1 = ("@@ -5,3 +5 @@ import click\n"
+               "@@ -30 +28 @@ def train():")
+    stdout2 = ("@@ -6,0 +7 @@ from git import Repo\n"
+               "@@ -26,0 +28,16 @@ def _get_model_path():")
 
-    mock_runbc.side_effect = stdouts
+    mock_runbc.side_effect = [stdout1, stdout2]
 
     lines = \
         _get_commit_lines('dc95b21', ['gitrisky/cli.py', 'gitrisky/model.py'])
