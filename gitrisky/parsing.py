@@ -140,7 +140,7 @@ def get_labels():
 
     Returns
     -------
-    labels : pd.DataFrame of shape [n_commits, 1]
+    labels : pd.Series of shape (n_commits,)
         The labels to use for modeling. The dataframe is indexed by commit
         hash.
     """
@@ -154,4 +154,4 @@ def get_labels():
     labels = feats.index.isin(bug_commits).astype(int)
 
     # convert to DataFrame so everything is the same type
-    return pd.DataFrame(data=labels, index=feats.index, columns=['label'])
+    return pd.Series(data=labels, index=feats.index, name='label')
