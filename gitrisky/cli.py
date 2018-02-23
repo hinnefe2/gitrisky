@@ -1,5 +1,6 @@
 """This module contains cli commands to train and score gitrisky models"""
 
+import sys
 import click
 
 from .model import create_model, save_model, load_model
@@ -56,7 +57,7 @@ def predict(commit):
     except FileNotFoundError:
         print('could not find trained model. '
               'have you run "gitrisky train" yet?')
-        return
+        sys.exit(1)
 
     if commit is None:
         commit = get_latest_commit()
