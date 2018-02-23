@@ -14,7 +14,9 @@ def cli():
 
 
 @cli.command()
-def train():
+@click.option('-p', '--pattern', required=False,
+              help="Bug fix pattern. Ex. BUG,FIX", type=str)
+def train(pattern=None):
     """Train a git commit bug risk model.
 
     This will save a pickled sklearn model to a file in the toplevel directory
@@ -23,7 +25,10 @@ def train():
 
     # get the features and labels by parsing the git logs
     features = get_features()
-    labels = get_labels()
+    if pattern is not None:
+        labels = get_labels(pattern.split(','))
+    else:
+        labels = get_labels(pattern)
 
     # instantiate and train a model
     model = create_model()

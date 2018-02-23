@@ -135,7 +135,7 @@ def get_features(commit=None):
     return feats
 
 
-def get_labels():
+def get_labels(pattern=None):
     """Get a label for each commit indicating whether it introduced a bug.
 
     Returns
@@ -147,7 +147,7 @@ def get_labels():
 
     feats = get_features()
 
-    fix_commits = get_bugfix_commits()
+    fix_commits = get_bugfix_commits(pattern)
 
     bug_commits = link_fixes_to_bugs(fix_commits)
 

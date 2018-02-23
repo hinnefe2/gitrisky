@@ -3,7 +3,7 @@
 import re
 
 from collections import defaultdict
-from subprocess import check_output
+from subprocess import check_output, CalledProcessError
 
 
 def _run_bash_command(bash_cmd):
@@ -20,7 +20,11 @@ def _run_bash_command(bash_cmd):
         The resulting stdout output.
     """
 
-    stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+    try:
+        stdout = check_output(bash_cmd.split()).decode('utf-8').rstrip('\n')
+    except CalledProcessError as err:
+        print('Failed to execute bash command: {!r}'.format(str(bash_cmd)))
+        exit(1)
 
     return stdout
 
@@ -80,7 +84,7 @@ def get_git_log(commit=None):
     return stdout
 
 
-def get_bugfix_commits():
+def get_bugfix_commits(pattern=None):
     """Get the commits whose commit messages contain BUG or FIX.
 
     Returns
@@ -89,8 +93,12 @@ def get_bugfix_commits():
         A list of commit hashes.
     """
 
+    if pattern is None:
+        pattern = ("BUG", "FIX")
+
     # TODO: add option to specify custom bugfix tags
-    bash_cmd = "git log -i --all --grep BUG --grep FIX --pretty=format:%h"
+    bash_cmd = "git log -i --all --grep {} --grep {} --pretty=format:%h"\
+        .format(pattern[0], pattern[1])
 
     stdout = _run_bash_command(bash_cmd)
 
