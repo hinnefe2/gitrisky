@@ -1,5 +1,6 @@
 """This module contains cli commands to train and score gitrisky models"""
 
+import sys
 import click
 
 from .model import create_model, save_model, load_model
@@ -26,10 +27,10 @@ def train():
 
     # instantiate and train a model
     model = create_model()
-    model.fit(features, labels.label)
+    model.fit(features, labels)
 
     print('Model trained on {n} training examples with {n_bug} positive cases'
-          .format(n=len(features), n_bug=sum(labels.label)))
+          .format(n=len(features), n_bug=sum(labels)))
 
     # pickle the model to a file in the top level repo directory
     save_model(model)
@@ -56,7 +57,7 @@ def predict(commit):
     except FileNotFoundError:
         print('could not find trained model. '
               'have you run "gitrisky train" yet?')
-        return
+        sys.exit(1)
 
     if commit is None:
         commit = get_latest_commit()
