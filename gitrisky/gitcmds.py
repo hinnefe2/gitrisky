@@ -94,7 +94,8 @@ def get_bugfix_commits():
 
     stdout = _run_bash_command(bash_cmd)
 
-    commits = stdout.split('\n')
+    # filter out empty strings
+    commits = [commit for commit in stdout.split('\n') if commit]
 
     return commits
 
