@@ -23,7 +23,17 @@ def train():
 
     # get the features and labels by parsing the git logs
     features = get_features()
-    labels = get_labels()
+
+    # we can't train a model without positive training examples so we fail with
+    # an informative error message
+    try:
+        labels = get_labels()
+    except ValueError:
+        # TODO: update this message once we support more / custom bug tags
+        print('Failed to find any bug commits by parsing commit logs.\n'
+              'gitrisky looks for commit messages containing "bug" or "fix" '
+              'and this repo appears not to have any.')
+        sys.exit(1)
 
     # instantiate and train a model
     model = create_model()
