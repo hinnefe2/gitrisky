@@ -143,12 +143,6 @@ def get_labels():
     labels : pd.Series of shape (n_commits,)
         The labels to use for modeling. The dataframe is indexed by commit
         hash.
-
-    Raises
-    ------
-    ValueError
-        If there are no positive labels (i.e. no commits which introduced a
-        bug according to the commit messages).
     """
 
     feats = get_features()
@@ -158,9 +152,6 @@ def get_labels():
     bug_commits = link_fixes_to_bugs(fix_commits)
 
     labels = feats.index.isin(bug_commits).astype(int)
-
-    if sum(labels) == 0:
-        raise ValueError('No bug commits found')
 
     # convert to DataFrame so everything is the same type
     return pd.Series(data=labels, index=feats.index, name='label')

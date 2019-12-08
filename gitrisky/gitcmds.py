@@ -87,6 +87,12 @@ def get_bugfix_commits():
     -------
     commits : list(str)
         A list of commit hashes.
+
+    Raises
+    ------
+    ValueError
+        If there are no bugfix commits (i.e. no commits which fix a bug
+        according to the commit messages).
     """
 
     # TODO: add option to specify custom bugfix tags
@@ -96,6 +102,9 @@ def get_bugfix_commits():
 
     # filter out empty strings
     commits = [commit for commit in stdout.split('\n') if commit]
+
+    if not commits:
+        raise ValueError('No bug fix commits found')
 
     return commits
 
