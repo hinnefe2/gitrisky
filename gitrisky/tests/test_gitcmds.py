@@ -1,4 +1,6 @@
 import mock
+import pytest
+
 import numpy as np
 
 from collections import defaultdict
@@ -83,6 +85,17 @@ def test_get_bugfix_commits(mock_runbc):
         'git log -i --all --grep BUG --grep FIX --pretty=format:%h')
     assert np.array_equal(commits, ['671e13d', '4fe1c42', '3e10227',
                                     '91d54e3', '2c3dca4'])
+
+
+@mock.patch('gitrisky.gitcmds._run_bash_command')
+def test_get_bugfix_commits_no_bugs(mock_runbc):
+
+    stdout = "\n"
+
+    mock_runbc.return_value = stdout
+
+    with pytest.raises(ValueError):
+        get_bugfix_commits()
 
 
 @mock.patch('gitrisky.gitcmds._run_bash_command')

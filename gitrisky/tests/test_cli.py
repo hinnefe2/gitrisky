@@ -27,6 +27,28 @@ def test_cli_train(m_save_model, m_create_model, m_get_labels, m_get_features):
 
 
 @mock.patch('gitrisky.cli.get_features')
+@mock.patch('gitrisky.cli.get_labels')
+@mock.patch('gitrisky.cli.create_model')
+@mock.patch('gitrisky.cli.save_model')
+def test_cli_train_no_bugs(m_save_model, m_create_model, m_get_labels,
+                           m_get_features):
+
+    # make some fake features and labels
+    m_get_features.return_value = [[1, 1], [2, 2]]
+    m_get_labels.side_effect = ValueError('No bug commits found')
+
+    # test the 'gitrisky train' cli command
+    runner = CliRunner()
+    result = runner.invoke(cli, ['train'])
+
+    assert result.exit_code == 1
+    assert result.output == (
+        'Failed to find any bug commits by parsing commit logs.\n'
+        'gitrisky looks for commit messages containing "bug" or "fix" '
+        'and this repo appears not to have any.\n')
+
+
+@mock.patch('gitrisky.cli.get_features')
 @mock.patch('gitrisky.cli.get_latest_commit')
 @mock.patch('gitrisky.cli.load_model')
 def test_cli_predict(m_load_model, m_get_latest_commit, m_get_features):
